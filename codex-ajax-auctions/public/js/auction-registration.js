@@ -335,6 +335,14 @@ function setStageFlags( $stage, flags ) {
 	} );
 }
 
+function setStageFoldState( $stage, shouldFold ) {
+	if ( ! $stage.length ) {
+		return;
+	}
+
+	$stage.toggleClass( 'is-folded', !! shouldFold );
+}
+
 function syncStageStates( $card, state ) {
 	var $registration = $card.find( '[data-codfaa-stage="registration"]' );
 	var $countdown = $card.find( '[data-codfaa-stage="countdown"]' );
@@ -353,6 +361,8 @@ function syncStageStates( $card, state ) {
 		complete: countdownComplete,
 		locked: ! countdownComplete && ( ! state.userRegistered || state.ended )
 	} );
+	var countdownActive = ! countdownComplete && state.ready && state.userRegistered && ! state.ended;
+	setStageFoldState( $countdown, ! countdownActive );
 
 	var liveActive = state.phase === 'live' && ! state.ended;
 	setStageFlags( $live, {
@@ -360,12 +370,14 @@ function syncStageStates( $card, state ) {
 		complete: state.ended,
 		locked: ! liveActive && ! state.ended
 	} );
+	setStageFoldState( $live, ! liveActive );
 
 	setStageFlags( $ended, {
 		active: state.ended,
 		complete: state.ended,
 		locked: ! state.ended
 	} );
+	setStageFoldState( $ended, ! state.ended );
 }
 
 function toggleRegisterCard( $card, state ) {

@@ -108,7 +108,7 @@ if ( $is_registered || $ended ) {
 	$registration_stage_classes .= ' is-active';
 }
 
-$countdown_stage_classes = 'codfaa-stage codfaa-stage--countdown';
+$countdown_stage_classes = 'codfaa-stage codfaa-stage--countdown codfaa-stage--foldable';
 $countdown_completed     = ( \Codfaa\Auctions\Bidding_Service::STATE_LIVE === $current_state ) || $ended;
 $countdown_active        = ! $countdown_completed && $ready && $is_registered;
 if ( $countdown_completed ) {
@@ -118,8 +118,11 @@ if ( $countdown_completed ) {
 } else {
 	$countdown_stage_classes .= ' is-locked';
 }
+if ( ! $countdown_active ) {
+	$countdown_stage_classes .= ' is-folded';
+}
 
-$live_stage_classes = 'codfaa-stage codfaa-stage--live codfaa-bid-card';
+$live_stage_classes = 'codfaa-stage codfaa-stage--live codfaa-bid-card codfaa-stage--foldable';
 if ( $ended ) {
 	$live_stage_classes .= ' is-complete';
 } elseif ( \Codfaa\Auctions\Bidding_Service::STATE_LIVE === $current_state ) {
@@ -127,12 +130,18 @@ if ( $ended ) {
 } else {
 	$live_stage_classes .= ' is-locked';
 }
+if ( \Codfaa\Auctions\Bidding_Service::STATE_LIVE !== $current_state || $ended ) {
+	$live_stage_classes .= ' is-folded';
+}
 
-$ended_stage_classes = 'codfaa-stage codfaa-stage--result';
+$ended_stage_classes = 'codfaa-stage codfaa-stage--result codfaa-stage--foldable';
 if ( $ended ) {
 	$ended_stage_classes .= ' is-active is-complete';
 } else {
 	$ended_stage_classes .= ' is-locked';
+}
+if ( ! $ended ) {
+	$ended_stage_classes .= ' is-folded';
 }
 
 $claim_value_text = $winner_claim_total_display ? wp_strip_all_tags( $winner_claim_total_display ) : wp_strip_all_tags( $registration_price );
@@ -287,18 +296,20 @@ if ( ! function_exists( 'codfaa_stage_icon_markup' ) ) {
 							<span class="codfaa-stage__status-icon codfaa-stage__status-icon--lock" aria-hidden="true"><?php echo codfaa_stage_icon_markup( 'lock' ); ?></span>
 						</div>
 					</header>
-					<div class="codfaa-countdown-card">
-						<div class="codfaa-countdown-card__clock" data-codfaa-lock-countdown <?php echo ( $ready && $prelive_remaining > 0 && ! $ended ) ? '' : 'style="display:none;"'; ?>>
-							<span class="codfaa-countdown-card__value" data-codfaa-lock-timer><?php echo esc_html( $prelive_initial_formatted ); ?></span>
-							<small><?php esc_html_e( 'remaining', 'codex-ajax-auctions' ); ?></small>
+					<div class="codfaa-stage__body">
+						<div class="codfaa-countdown-card">
+							<div class="codfaa-countdown-card__clock" data-codfaa-lock-countdown <?php echo ( $ready && $prelive_remaining > 0 && ! $ended ) ? '' : 'style="display:none;"'; ?>>
+								<span class="codfaa-countdown-card__value" data-codfaa-lock-timer><?php echo esc_html( $prelive_initial_formatted ); ?></span>
+								<small><?php esc_html_e( 'remaining', 'codex-ajax-auctions' ); ?></small>
+							</div>
+							<p class="codfaa-countdown-card__note">
+								<?php esc_html_e( "We're giving all participants some time to get ready!", 'codex-ajax-auctions' ); ?>
+							</p>
 						</div>
-						<p class="codfaa-countdown-card__note">
-							<?php esc_html_e( "We're giving all participants some time to get ready!", 'codex-ajax-auctions' ); ?>
-						</p>
 					</div>
 				</article>
 				<article class="<?php echo esc_attr( $live_stage_classes ); ?>" data-codfaa-stage="live">
-					<div class="codfaa-bid-card__body">
+					<div class="codfaa-stage__body codfaa-bid-card__body">
 						<header class="codfaa-stage__header codfaa-stage__header--live">
 							<div class="codfaa-stage__title">
 								<span class="codfaa-stage__badge">3</span>
@@ -383,9 +394,11 @@ if ( ! function_exists( 'codfaa_stage_icon_markup' ) ) {
 							<span class="codfaa-stage__status-icon codfaa-stage__status-icon--lock" aria-hidden="true"><?php echo codfaa_stage_icon_markup( 'lock' ); ?></span>
 						</div>
 					</header>
-					<div class="codfaa-result-card">
-						<div class="codfaa-bid-result <?php echo esc_attr( $result_variant ? 'is-' . $result_variant : '' ); ?>" data-codfaa-winner-summary><?php echo $result_text ? wp_kses_post( $result_text ) : esc_html__( 'Results will appear once the auction ends.', 'codex-ajax-auctions' ); ?></div>
-						<a href="#" class="<?php echo esc_attr( $claim_classes ); ?>" data-auction="<?php echo esc_attr( $auction->ID ); ?>" data-label="<?php echo esc_attr( $claim_label ); ?>" aria-hidden="<?php echo esc_attr( $ended && $user_is_winner && ! $winner_claimed ? 'false' : 'true' ); ?>"><?php echo esc_html( $claim_label ); ?></a>
+					<div class="codfaa-stage__body">
+						<div class="codfaa-result-card">
+							<div class="codfaa-bid-result <?php echo esc_attr( $result_variant ? 'is-' . $result_variant : '' ); ?>" data-codfaa-winner-summary><?php echo $result_text ? wp_kses_post( $result_text ) : esc_html__( 'Results will appear once the auction ends.', 'codex-ajax-auctions' ); ?></div>
+							<a href="#" class="<?php echo esc_attr( $claim_classes ); ?>" data-auction="<?php echo esc_attr( $auction->ID ); ?>" data-label="<?php echo esc_attr( $claim_label ); ?>" aria-hidden="<?php echo esc_attr( $ended && $user_is_winner && ! $winner_claimed ? 'false' : 'true' ); ?>"><?php echo esc_html( $claim_label ); ?></a>
+						</div>
 					</div>
 				</article>
 			</section>

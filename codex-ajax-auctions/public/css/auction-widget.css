@@ -1221,6 +1221,18 @@
 	color: #6b6e7d;
 }
 
+.codfaa-stage__body {
+	margin-top: 1rem;
+}
+
+.codfaa-stage--foldable.is-folded .codfaa-stage__body {
+	display: none;
+}
+
+.codfaa-stage--foldable.is-folded {
+	padding-bottom: 1rem;
+}
+
 .codfaa-register-pills {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
