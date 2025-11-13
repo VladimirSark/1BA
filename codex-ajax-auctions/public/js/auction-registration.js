@@ -317,15 +317,65 @@ function togglePreliveVisibility( $card, state ) {
 	$wrap.toggle( shouldShow );
 }
 
-function toggleRegisterCard( $card, state ) {
-	var $register = $card.find( '[data-codfaa-register-card]' );
-
-	if ( ! $register.length ) {
+function setStageFlags( $stage, flags ) {
+	if ( ! $stage.length ) {
 		return;
 	}
 
-	var shouldHide = state.ready || state.ended;
-	$register.toggleClass( 'is-hidden', shouldHide );
+	var map = {
+		active: 'is-active',
+		complete: 'is-complete',
+		locked: 'is-locked'
+	};
+
+	Object.keys( map ).forEach( function( key ) {
+		var className = map[ key ];
+		var shouldHave = flags && flags[ key ];
+		$stage.toggleClass( className, !! shouldHave );
+	} );
+}
+
+function syncStageStates( $card, state ) {
+	var $registration = $card.find( '[data-codfaa-stage="registration"]' );
+	var $countdown = $card.find( '[data-codfaa-stage="countdown"]' );
+	var $live = $card.find( '[data-codfaa-stage="live"]' );
+	var $ended = $card.find( '[data-codfaa-stage="ended"]' );
+
+	setStageFlags( $registration, {
+		active: ! state.userRegistered && ! state.ended,
+		complete: state.userRegistered || state.ended,
+		locked: false
+	} );
+
+	var countdownComplete = state.phase === 'live' || state.ended;
+	setStageFlags( $countdown, {
+		active: ! countdownComplete && state.ready && state.userRegistered && ! state.ended,
+		complete: countdownComplete,
+		locked: ! countdownComplete && ( ! state.userRegistered || state.ended )
+	} );
+
+	var liveActive = state.phase === 'live' && ! state.ended;
+	setStageFlags( $live, {
+		active: liveActive,
+		complete: state.ended,
+		locked: ! liveActive && ! state.ended
+	} );
+
+	setStageFlags( $ended, {
+		active: state.ended,
+		complete: state.ended,
+		locked: ! state.ended
+	} );
+}
+
+function toggleRegisterCard( $card, state ) {
+	var $successNote = $card.find( '[data-codfaa-register-success]' );
+
+	if ( $successNote.length ) {
+		$successNote.toggle( !! state.userRegistered );
+	}
+
+	syncStageStates( $card, state );
 }
 
 function startEndPolling( $card, state ) {

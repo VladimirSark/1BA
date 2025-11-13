@@ -1000,3 +1000,401 @@
 		grid-template-columns: 1fr;
 	}
 }
+/* ------------------------------------------------------------------
+ * Front-end mockup skin overrides
+ * ------------------------------------------------------------------ */
+.codfaa-auction-experience {
+	background-color: #f6f8ff;
+	background-image: radial-gradient(#d7def5 1px, transparent 0);
+	background-size: 22px 22px;
+	padding: 2.75rem 0 4rem;
+	color: #111321;
+}
+
+.codfaa-container {
+	max-width: 1120px;
+	margin: 0 auto;
+	padding: 0 1.5rem;
+}
+
+.codfaa-auction-layout {
+	display: grid;
+	grid-template-columns: 1.05fr 0.95fr;
+	gap: 1.75rem;
+}
+
+@media (max-width: 1080px) {
+	.codfaa-auction-layout {
+		grid-template-columns: 1fr;
+	}
+}
+
+.codfaa-product-panel {
+	background: #fff;
+	border-radius: 24px;
+	border: 2px solid #111321;
+	padding: 1.75rem;
+	box-shadow: 0 25px 60px rgba(15, 23, 42, 0.08);
+}
+
+.codfaa-product-frame {
+	display: grid;
+	grid-template-columns: 220px 1fr;
+	gap: 1.5rem;
+	align-items: center;
+	margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+	.codfaa-product-frame {
+		grid-template-columns: 1fr;
+	}
+}
+
+.codfaa-product-media {
+	background: #fefefe;
+	border: 2px solid #111321;
+	border-radius: 22px;
+	padding: 1rem;
+	text-align: center;
+}
+
+.codfaa-product-media img {
+	width: 100%;
+	height: auto;
+	object-fit: contain;
+}
+
+.codfaa-product-summary h2 {
+	margin: 0 0 0.75rem;
+	font-size: 1.45rem;
+	font-weight: 700;
+}
+
+.codfaa-product-bullets {
+	list-style: none;
+	padding: 0;
+	margin: 0 0 1.25rem;
+	font-size: 0.98rem;
+	color: #2f3142;
+}
+
+.codfaa-product-bullets li + li {
+	margin-top: 0.4rem;
+}
+
+.codfaa-product-cta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.85rem;
+	align-items: center;
+}
+
+.codfaa-product-link {
+	font-weight: 600;
+	color: #111321;
+	text-decoration: underline;
+}
+
+.codfaa-product-meta {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	gap: 1rem;
+}
+
+.codfaa-product-meta article {
+	border: 2px solid #111321;
+	border-radius: 18px;
+	padding: 0.85rem 1.25rem;
+	text-align: center;
+	background: #f9f9ff;
+}
+
+.codfaa-product-meta p {
+	margin: 0;
+	font-size: 0.9rem;
+	color: #4d4f63;
+}
+
+.codfaa-product-meta strong {
+	display: block;
+	margin-top: 0.45rem;
+	font-size: 1.25rem;
+}
+
+.codfaa-stage-stack {
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+}
+
+.codfaa-stage {
+	background: #fff;
+	border: 2px solid #111321;
+	border-radius: 22px;
+	padding: 1.5rem;
+	transition: box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+	position: relative;
+}
+
+.codfaa-stage.is-active {
+	box-shadow: 0 18px 45px rgba(17, 19, 33, 0.12);
+}
+
+.codfaa-stage.is-complete {
+	border-color: #0f172a;
+}
+
+.codfaa-stage.is-locked {
+	opacity: 0.65;
+}
+
+.codfaa-stage__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+
+.codfaa-stage__title {
+	display: flex;
+	align-items: center;
+	gap: 0.85rem;
+}
+
+.codfaa-stage__badge {
+	width: 2rem;
+	height: 2rem;
+	border-radius: 50%;
+	background: #0f172a;
+	color: #fff;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 600;
+}
+
+.codfaa-stage__status {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+}
+
+.codfaa-stage__status-icon {
+	display: none;
+	width: 2rem;
+	height: 2rem;
+	border-radius: 50%;
+	border: 2px solid #0f172a;
+	align-items: center;
+	justify-content: center;
+	color: #0f172a;
+}
+
+.codfaa-stage__status-icon svg {
+	width: 0.95rem;
+	height: 0.95rem;
+}
+
+.codfaa-stage.is-complete .codfaa-stage__status-icon--check {
+	display: inline-flex;
+	background: #0f172a;
+	color: #fff;
+}
+
+.codfaa-stage.is-locked .codfaa-stage__status-icon--lock {
+	display: inline-flex;
+	background: #fff;
+}
+
+.codfaa-stage__meta {
+	display: flex;
+	align-items: baseline;
+	gap: 0.35rem;
+	font-weight: 600;
+	color: #0f172a;
+}
+
+.codfaa-stage__hint {
+	margin: 0 0 0.75rem;
+	font-size: 0.9rem;
+	color: #6b6e7d;
+}
+
+.codfaa-register-pills {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 1rem;
+	margin-bottom: 1.25rem;
+}
+
+.codfaa-register-pills article,
+.codfaa-register-pill {
+	border: 2px solid #111321;
+	border-radius: 16px;
+	padding: 0.85rem 1.1rem;
+	background: #f9f9ff;
+}
+
+.codfaa-register-pills p {
+	margin: 0;
+	font-size: 0.85rem;
+	color: #4d4f63;
+}
+
+.codfaa-register-pills strong {
+	display: block;
+	margin-top: 0.35rem;
+	font-size: 1.25rem;
+	font-weight: 700;
+}
+
+.codfaa-register-note--success {
+	color: #15803d;
+	font-weight: 600;
+}
+
+.codfaa-legal-checkbox {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.9rem;
+	margin-bottom: 0.5rem;
+}
+
+.codfaa-legal-checkbox button {
+	background: transparent;
+	border: none;
+	text-decoration: underline;
+	cursor: pointer;
+	font-weight: 600;
+	padding: 0;
+}
+
+.codfaa-countdown-card {
+	border: 2px solid #111321;
+	border-radius: 18px;
+	padding: 1.25rem;
+	text-align: center;
+	background: #f9f9ff;
+}
+
+.codfaa-countdown-card__clock {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.35rem;
+	margin-bottom: 0.75rem;
+}
+
+.codfaa-countdown-card__value {
+	font-size: 2.25rem;
+	font-weight: 700;
+}
+
+.codfaa-countdown-card__note {
+	margin: 0;
+	font-size: 0.95rem;
+	color: #4d4f63;
+}
+
+.codfaa-bid-card {
+	border: 2px solid #111321;
+	border-radius: 22px;
+	overflow: hidden;
+	background: #fff;
+}
+
+.codfaa-bid-card__body {
+	padding: 1.5rem;
+	gap: 1rem;
+}
+
+.codfaa-bid-history ul {
+	border: 2px solid #111321;
+	border-radius: 16px;
+	padding: 0.75rem 1rem;
+	background: #fefefe;
+}
+
+.codfaa-recent__name {
+	font-weight: 600;
+}
+
+.codfaa-recent__amount {
+	font-weight: 600;
+	margin-left: auto;
+}
+
+.codfaa-result-card {
+	border: 2px solid #111321;
+	border-radius: 18px;
+	padding: 1.25rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.85rem;
+	background: #f9fff4;
+}
+
+.codfaa-bid-result {
+	margin: 0;
+	padding: 0.85rem 1rem;
+	border-radius: 12px;
+	font-weight: 600;
+	text-align: center;
+	background: #eceef7;
+}
+
+.codfaa-bid-result.is-win {
+	background: #d8f7dc;
+	color: #0f6a2d;
+}
+
+.codfaa-bid-result.is-lost {
+	background: #fde5e5;
+	color: #b91c1c;
+}
+
+.codfaa-bid-card__overlay {
+	background: rgba(255, 255, 255, 0.94);
+	border-radius: 22px;
+	border: 2px solid #111321;
+}
+
+.codfaa-lock-icon {
+	position: relative;
+	width: 3.25rem;
+	height: 3.25rem;
+	border-radius: 50%;
+	background: #0f172a;
+	margin-bottom: 0.5rem;
+}
+
+.codfaa-lock-icon__ring,
+.codfaa-lock-icon__body {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.codfaa-lock-icon__ring {
+	top: 0.6rem;
+	width: 1.6rem;
+	height: 1rem;
+	border: 2px solid #fff;
+	border-bottom: none;
+	border-radius: 8px 8px 0 0;
+}
+
+.codfaa-lock-icon__body {
+	bottom: 0.7rem;
+	width: 1.8rem;
+	height: 1.4rem;
+	border-radius: 6px;
+	background: #fff;
+}
+
+.codfaa-result-card .codfaa-claim-prize {
+	align-self: center;
+}
