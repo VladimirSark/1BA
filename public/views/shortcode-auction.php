@@ -64,8 +64,14 @@ $share_notice   = __( 'Registration complete. Lobby is filling—share the aucti
 $can_join  = $registration_obj && $is_logged_in && ! $is_registered && ! $registration_pending;
 $login_url = wp_login_url( isset( $display_url ) ? $display_url : home_url() );
 
-$consent_disabled = $is_registered || $registration_pending || $lobby_full_blocking;
 $lobby_full_blocking = ! $is_registered && ! $registration_pending && $progress_percent >= 100;
+$consent_disabled = $is_registered || $registration_pending || $lobby_full_blocking;
+
+$prelive_initial_secs     = max( 0, (int) $prelive_remaining );
+$prelive_initial_display  = gmdate( 'i:s', $prelive_initial_secs );
+$prelive_bar_initial      = ( $prelive_duration > 0 && $prelive_initial_secs < $prelive_duration )
+	? ( ( ( $prelive_duration - $prelive_initial_secs ) / max( 1, $prelive_duration ) ) * 100 )
+	: 0;
 ?>
 <!doctype html>
 <html lang="en">
@@ -329,19 +335,19 @@ $lobby_full_blocking = ! $is_registered && ! $registration_pending && $progress_
             </div>
           </div>
 
-          <div id="step2Body" class="mt-4 hidden">
+          <div id="step2Body" class="mt-4 hidden" data-codfaa-prelive-wrapper>
             <div class="flex items-center justify-between">
               <p class="text-sm text-gray-700">
                 We’re giving all participants some time to get ready.
               </p>
               <div class="text-right">
                 <div class="text-xs text-gray-500 uppercase tracking-wide">Starts in</div>
-                <div class="text-2xl font-extrabold"><span id="preliveSec">10</span>s</div>
+                <div class="text-2xl font-extrabold"><span id="preliveSec" data-codfaa-prelive-timer><?php echo esc_html( $prelive_initial_display ); ?></span><span class="text-base font-normal">s</span></div>
               </div>
             </div>
 
             <div class="mt-4 h-2 bg-gray-200 rounded">
-              <div id="preliveBar" class="h-2 bg-black rounded" style="width:0%"></div>
+              <div id="preliveBar" class="h-2 bg-black rounded" data-codfaa-timer-progress style="width: <?php echo esc_attr( $prelive_bar_initial ); ?>%"></div>
             </div>
           </div>
         </div>
