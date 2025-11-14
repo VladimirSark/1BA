@@ -65,13 +65,8 @@ $can_join  = $registration_obj && $is_logged_in && ! $is_registered && ! $regist
 $login_url = wp_login_url( isset( $display_url ) ? $display_url : home_url() );
 
 $lobby_full_blocking = ! $is_registered && ! $registration_pending && $progress_percent >= 100;
-$consent_disabled = $is_registered || $registration_pending || $lobby_full_blocking;
-
-$prelive_initial_secs     = max( 0, (int) $prelive_remaining );
-$prelive_initial_display  = gmdate( 'i:s', $prelive_initial_secs );
-$prelive_bar_initial      = ( $prelive_duration > 0 && $prelive_initial_secs < $prelive_duration )
-	? ( ( ( $prelive_duration - $prelive_initial_secs ) / max( 1, $prelive_duration ) ) * 100 )
-	: 0;
+$effective_ready     = $ready || $lobby_full_blocking;
+$consent_disabled    = $is_registered || $registration_pending || $effective_ready;
 
 $prelive_initial_secs     = max( 0, (int) $prelive_remaining );
 $prelive_initial_display  = gmdate( 'i:s', $prelive_initial_secs );
@@ -108,7 +103,7 @@ $prelive_bar_initial      = ( $prelive_duration > 0 && $prelive_initial_secs < $
   data-initial-status="<?php echo esc_attr( $initial_status_message ); ?>"
   data-can-bid="<?php echo esc_attr( $can_bid ? 1 : 0 ); ?>"
   data-ended="<?php echo esc_attr( $ended ? 1 : 0 ); ?>"
-  data-ready="<?php echo esc_attr( $ready ? 1 : 0 ); ?>"
+  data-ready="<?php echo esc_attr( $effective_ready ? 1 : 0 ); ?>"
   data-prelive="<?php echo esc_attr( $prelive_remaining ); ?>"
   data-prelive-total="<?php echo esc_attr( $prelive_duration ); ?>"
   data-go-live="<?php echo esc_attr( $go_live_at ); ?>"
@@ -221,7 +216,7 @@ $prelive_bar_initial      = ( $prelive_duration > 0 && $prelive_initial_secs < $
       <!-- RIGHT: 4-step demo flow (folded & locked stages) -->
       <div id="demo" class="space-y-6">
         <!-- STEP 1: Registration -->
-        <div class="border rounded-2xl p-6 shadow-sm<?php echo $lobby_full_blocking ? " is-hidden" : ""; ?>" data-codfaa-register-card>
+        <div class="border rounded-2xl p-6 shadow-sm<?php echo $effective_ready ? " is-hidden" : ""; ?>" data-codfaa-register-card data-codfaa-stage="registration">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-2">
               <span class="inline-flex items-center justify-center h-7 w-7 rounded-full bg-black text-white text-xs font-semibold">1</span>
@@ -323,7 +318,7 @@ $prelive_bar_initial      = ( $prelive_duration > 0 && $prelive_initial_secs < $
         </div>
 
         <!-- STEP 2: Countdown to live -->
-        <div class="border rounded-2xl p-6 shadow-sm">
+        <div class="border rounded-2xl p-6 shadow-sm" data-codfaa-stage="countdown">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-2">
               <span class="inline-flex items-center justify-center h-7 w-7 rounded-full bg-black text-white text-xs font-semibold">2</span>
@@ -345,7 +340,7 @@ $prelive_bar_initial      = ( $prelive_duration > 0 && $prelive_initial_secs < $
             </div>
           </div>
 
-          <div id="step2Body" class="mt-4 <?php echo ( $ready || $lobby_full_blocking ) ? "" : "hidden"; ?>" data-codfaa-prelive-wrapper>
+          <div id="step2Body" class="mt-4<?php echo $effective_ready ? "" : " hidden"; ?>" data-codfaa-prelive-wrapper>
             <div class="flex items-center justify-between">
               <p class="text-sm text-gray-700">
                 We’re giving all participants some time to get ready.
@@ -363,7 +358,7 @@ $prelive_bar_initial      = ( $prelive_duration > 0 && $prelive_initial_secs < $
         </div>
 
         <!-- STEP 3: Live bidding -->
-        <div class="border rounded-2xl p-6 shadow-sm">
+        <div class="border rounded-2xl p-6 shadow-sm" data-codfaa-stage="live">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items center gap-2">
               <span class="inline-flex items-center justify-center h-7 w-7 rounded-full bg-black text-white text-xs font-semibold">3</span>
@@ -423,7 +418,7 @@ $prelive_bar_initial      = ( $prelive_duration > 0 && $prelive_initial_secs < $
         </div>
 
         <!-- STEP 4: Auction ended -->
-        <div class="border rounded-2xl p-6 shadow-sm">
+        <div class="border rounded-2xl p-6 shadow-sm" data-codfaa-stage="ended">
           <div class="flex items-center justify-between gap-2">
             <div class="flex items-center gap-2">
               <span class="inline-flex items-center justify-center h-7 w-7 rounded-full bg-black text-white text-xs font-semibold">4</span>

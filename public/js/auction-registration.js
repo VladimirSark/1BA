@@ -183,6 +183,7 @@ function updateParticipants( $card, payload ) {
 		var required = payload.required;
 		var percent = payload.progressPercent;
 		var label = payload.participantLabel;
+		var state = $card.data( 'codfaaState' ) || {};
 
 		if ( participants !== undefined ) {
 			$card.attr( 'data-participants', participants );
@@ -209,6 +210,15 @@ function updateParticipants( $card, payload ) {
 		if ( $label.length && label ) {
 			$label.text( label );
 		}
+
+		state.progressPercent = percent;
+		if ( participants !== undefined ) {
+			state.participants = participants;
+		}
+		if ( required !== undefined ) {
+			state.required = required;
+		}
+		$card.data( 'codfaaState', state );
 	}
 
 function toggleTimerVisibility( $card, shouldShow ) {
@@ -723,6 +733,26 @@ function applyStatusPayload( $card, state, payload ) {
 
 	if ( payload.participants !== undefined || payload.required !== undefined || payload.participantLabel ) {
 		updateParticipants( $card, payload );
+	}
+
+	if ( state.progressPercent === undefined ) {
+		var initialProgress = parseFloat( $card.attr( 'data-progress' ) );
+		if ( ! isNaN( initialProgress ) ) {
+			state.progressPercent = initialProgress;
+		}
+	}
+
+	if ( ! state.ready && ! state.ended && state.progressPercent !== undefined && state.progressPercent >= 100 ) {
+		state.ready = true;
+		if ( state.phase !== 'live' && state.phase !== 'ended' ) {
+			state.phase = 'ready';
+		}
+		if ( ! state.preliveBaseline ) {
+			state.preliveBaseline = state.preliveRemaining || parseInt( $card.attr( 'data-prelive-total' ), 10 ) || parseInt( $card.attr( 'data-prelive' ), 10 ) || 0;
+		}
+		if ( ! state.preliveRemaining || state.preliveRemaining <= 0 ) {
+			state.preliveRemaining = state.preliveBaseline || parseInt( $card.attr( 'data-prelive' ), 10 ) || 0;
+		}
 	}
 
 	if ( payload.userBidCount !== undefined || payload.bidCount !== undefined ) {
